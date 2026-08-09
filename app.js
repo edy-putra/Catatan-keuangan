@@ -95,10 +95,14 @@ alert("Data berhasil disimpan");
 
 function renderDashboard(){
 
+const sekarang = new Date();
+
 const hariIni =
-new Date()
-.toISOString()
-.split("T")[0];
+`${sekarang.getFullYear()}-${
+String(sekarang.getMonth()+1).padStart(2,'0')
+}-${
+String(sekarang.getDate()).padStart(2,'0')
+}`;
 
 const bulanIni =
 hariIni.substring(0,7);
@@ -431,13 +435,14 @@ alert("Semua data berhasil dihapus");
    TANGGAL OTOMATIS
 =========================== */
 
-document
-.getElementById("tanggal")
-.value =
-new Date()
-.toISOString()
-.split("T")[0];
+const today = new Date();
 
+document.getElementById("tanggal").value =
+`${today.getFullYear()}-${
+String(today.getMonth()+1).padStart(2,'0')
+}-${
+String(today.getDate()).padStart(2,'0')
+}`;
 /* ===========================
    LOAD AWAL
 =========================== */
