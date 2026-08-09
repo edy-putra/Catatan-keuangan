@@ -3,6 +3,30 @@ JSON.parse(
 localStorage.getItem("pengeluaran")
 ) || [];
 
+/* ===========================
+   NAVIGASI HALAMAN
+=========================== */
+
+function showPage(pageId){
+
+document
+.querySelectorAll(".page")
+.forEach(page => {
+
+page.classList.remove("active");
+
+});
+
+document
+.getElementById(pageId)
+.classList.add("active");
+
+}
+
+/* ===========================
+   SIMPAN DATA
+=========================== */
+
 function simpanData(){
 
 localStorage.setItem(
@@ -11,6 +35,10 @@ JSON.stringify(data)
 );
 
 }
+
+/* ===========================
+   TAMBAH PENGELUARAN
+=========================== */
 
 function tambahPengeluaran(){
 
@@ -30,7 +58,7 @@ document.getElementById("catatan").value;
 
 if(!tanggal || !nominal){
 
-alert("Lengkapi data");
+alert("Lengkapi data terlebih dahulu");
 
 return;
 
@@ -55,22 +83,31 @@ simpanData();
 document.getElementById("nominal").value="";
 document.getElementById("catatan").value="";
 
-renderTotal();
+renderDashboard();
 
-alert("Data tersimpan");
+alert("Data berhasil disimpan");
 
 }
 
-function renderTotal(){
+/* ===========================
+   DASHBOARD
+=========================== */
+
+function renderDashboard(){
 
 const hariIni =
-new Date().toISOString().split("T")[0];
+new Date()
+.toISOString()
+.split("T")[0];
 
 const bulanIni =
 hariIni.substring(0,7);
 
 let totalHari = 0;
 let totalBulan = 0;
+let jumlahTransaksi = 0;
+
+let kategoriBulanan = {};
 
 data.forEach(item=>{
 
@@ -78,143 +115,139 @@ if(item.tanggal === hariIni){
 
 totalHari += item.nominal;
 
+jumlahTransaksi++;
+
 }
 
 if(item.tanggal.startsWith(bulanIni)){
 
 totalBulan += item.nominal;
 
+if(!kategoriBulanan[item.kategori]){
+
+kategoriBulanan[item.kategori]=0;
+
+}
+
+kategoriBulanan[item.kategori]+=item.nominal;
+
 }
 
 });
 
-document.getElementById(
-"totalHariIni"
-).innerHTML =
+let kategoriTerbesar = "-";
+let nilaiTerbesar = 0;
+
+for(let kategori in kategoriBulanan){
+
+if(
+kategoriBulanan[kategori]
+>
+nilaiTerbesar
+){
+
+nilaiTerbesar =
+kategoriBulanan[kategori];
+
+kategoriTerbesar =
+kategori;
+
+}
+
+}
+
+document
+.getElementById("totalHariIni")
+.innerHTML =
 "Rp " +
 totalHari.toLocaleString("id-ID");
 
-document.getElementById(
-"totalBulanIni"
-).innerHTML =
+document
+.getElementById("totalBulanIni")
+.innerHTML =
 "Rp " +
 totalBulan.toLocaleString("id-ID");
 
-}
+document
+.getElementById("jumlahTransaksi")
+.innerHTML =
+jumlahTransaksi;
 
-function buatRingkasan(){
-
-const tanggal =
-document.getElementById(
-"tanggalRingkasan"
-).value;
-
-const hasil =
-data.filter(
-item =>
-item.tanggal === tanggal
-);
-
-let kategori = {};
-
-hasil.forEach(item=>{
-
-if(!kategori[item.kategori]){
-
-kategori[item.kategori]=0;
+document
+.getElementById("kategoriTerbesar")
+.innerHTML =
+kategoriTerbesar;
 
 }
 
-kategori[item.kategori]+=item.nominal;
-
-});
-
-let html =
-`<h3>Ringkasan ${tanggal}</h3>`;
-
-let totalHari = 0;
-
-for(let k in kategori){
-
-totalHari += kategori[k];
-
-html += `
-<div class="ringkasan-item">
-
-<span>${k}</span>
-
-<span>
-Rp ${kategori[k]
-.toLocaleString("id-ID")}
-</span>
-
-</div>
-`;
-
-}
-
-html += `
-<br>
-
-<b>
-Total :
-Rp ${totalHari
-.toLocaleString("id-ID")}
-</b>
-`;
-
-document.getElementById(
-"hasilRingkasan"
-).innerHTML = html;
-
-}
+/* ===========================
+   FILTER RIWAYAT
+=========================== */
 
 function filterRiwayat(){
 
 const tanggal =
-document.getElementById(
-"filterTanggal"
-).value;
+document
+.getElementById("filterTanggal")
+.value;
 
-const hasil =
-data.filter(
-item =>
+const hasilDiv =
+document
+.getElementById("hasilRiwayat");
+
+let hasil =
+data.filter(item =>
 item.tanggal === tanggal
 );
 
-let html = "";
+hasil.reverse();
 
 if(hasil.length===0){
 
-html = "Tidak ada data";
+hasilDiv.innerHTML =
+
+`
+<div class="empty">
+
+Tidak ada transaksi
+
+</div>
+`;
+
+return;
 
 }
 
+let html="";
+
 hasil.forEach(item=>{
 
-html += `
+html +=
 
+`
 <div class="item">
 
 <b>${item.kategori}</b>
 
-<br>
+<div class="badge">
+${item.tanggal}
+</div>
+
+<br><br>
 
 ${item.catatan || "-"}
 
-<br>
+<br><br>
 
+<b>
 Rp ${item.nominal
 .toLocaleString("id-ID")}
-
-<br>
-
-📅 ${item.tanggal}
+</b>
 
 <br><br>
 
 <button
-class="hapus"
+class="hapus-btn"
 onclick="hapusData(${item.id})">
 
 Hapus
@@ -222,37 +255,88 @@ Hapus
 </button>
 
 </div>
-
 `;
 
 });
 
-document.getElementById(
-"hasilRiwayat"
-).innerHTML = html;
+hasilDiv.innerHTML = html;
 
 }
 
+/* ===========================
+   HAPUS DATA
+=========================== */
+
 function hapusData(id){
 
-if(!confirm("Hapus data?")){
+const konfirmasi =
+confirm(
+"Yakin ingin menghapus data ini?"
+);
+
+if(!konfirmasi){
 
 return;
 
 }
 
 data =
-data.filter(
-item =>
+data.filter(item =>
 item.id !== id
 );
 
 simpanData();
 
-renderTotal();
+renderDashboard();
 
 filterRiwayat();
 
 }
 
-renderTotal();
+/* ===========================
+   HAPUS SEMUA DATA
+=========================== */
+
+function hapusSemuaData(){
+
+const konfirmasi =
+confirm(
+"SEMUA DATA AKAN DIHAPUS!"
+);
+
+if(!konfirmasi){
+
+return;
+
+}
+
+data = [];
+
+simpanData();
+
+renderDashboard();
+
+document
+.getElementById("hasilRiwayat")
+.innerHTML = "";
+
+alert("Semua data berhasil dihapus");
+
+}
+
+/* ===========================
+   TANGGAL OTOMATIS
+=========================== */
+
+document
+.getElementById("tanggal")
+.value =
+new Date()
+.toISOString()
+.split("T")[0];
+
+/* ===========================
+   LOAD AWAL
+=========================== */
+
+renderDashboard();
