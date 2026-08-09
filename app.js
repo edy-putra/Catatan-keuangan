@@ -536,3 +536,221 @@ namaFile
 );
 
 }
+
+/* ===========================
+   FILTER RENTANG TANGGAL
+=========================== */
+
+function filterRiwayatPeriode(){
+
+const awal =
+document
+.getElementById("tanggalAwal")
+.value;
+
+const akhir =
+document
+.getElementById("tanggalAkhir")
+.value;
+
+if(!awal || !akhir){
+
+alert(
+"Pilih tanggal awal dan akhir"
+);
+
+return;
+
+}
+
+let hasil =
+data.filter(item =>
+
+item.tanggal >= awal &&
+item.tanggal <= akhir
+
+);
+
+hasil.sort((a,b)=>
+
+new Date(b.tanggal)
+-
+new Date(a.tanggal)
+
+);
+
+let total = 0;
+
+let kategori = {};
+
+hasil.forEach(item=>{
+
+total += item.nominal;
+
+if(!kategori[item.kategori]){
+
+kategori[item.kategori] = 0;
+
+}
+
+kategori[item.kategori] += item.nominal;
+
+});
+
+let kategoriTerbesar = "-";
+let nominalTerbesar = 0;
+
+for(let k in kategori){
+
+if(kategori[k] > nominalTerbesar){
+
+nominalTerbesar =
+kategori[k];
+
+kategoriTerbesar =
+k;
+
+}
+
+}
+
+document
+.getElementById(
+"ringkasanPeriode"
+)
+.innerHTML =
+
+`
+<div class="ringkasan-periode">
+
+<h3>📊 Ringkasan Periode</h3>
+
+<p>
+<b>Periode:</b>
+${awal}
+s/d
+${akhir}
+</p>
+
+<p>
+<b>Jumlah Transaksi:</b>
+${hasil.length}
+</p>
+
+<p>
+<b>Total Pengeluaran:</b>
+Rp ${total.toLocaleString("id-ID")}
+</p>
+
+<p>
+<b>Kategori Terbesar:</b>
+${kategoriTerbesar}
+</p>
+
+<p>
+<b>Total Kategori:</b>
+Rp ${nominalTerbesar.toLocaleString("id-ID")}
+</p>
+
+</div>
+`;
+
+const hasilDiv =
+document
+.getElementById("hasilRiwayat");
+
+if(hasil.length===0){
+
+hasilDiv.innerHTML =
+
+`
+<div class="empty">
+
+Tidak ada transaksi
+pada periode ini
+
+</div>
+`;
+
+return;
+
+}
+
+let html = "";
+
+hasil.forEach(item=>{
+
+html +=
+
+`
+<div class="item">
+
+<b>
+${item.kategori}
+</b>
+
+<div class="badge">
+
+${item.tanggal}
+
+</div>
+
+<br><br>
+
+${item.catatan || "-"}
+
+<br><br>
+
+<b>
+
+Rp ${item.nominal
+.toLocaleString("id-ID")}
+
+</b>
+
+<br><br>
+
+<button
+class="hapus-btn"
+onclick="hapusData(${item.id})">
+
+Hapus
+
+</button>
+
+</div>
+`;
+
+});
+
+hasilDiv.innerHTML = html;
+
+}
+
+const sekarang =
+new Date();
+
+const awalBulan =
+
+`${sekarang.getFullYear()}-${
+String(sekarang.getMonth()+1)
+.padStart(2,'0')
+}-01`;
+
+const hariIni =
+
+`${sekarang.getFullYear()}-${
+String(sekarang.getMonth()+1)
+.padStart(2,'0')
+}-${
+String(sekarang.getDate())
+.padStart(2,'0')
+}`;
+
+document
+.getElementById("tanggalAwal")
+.value = awalBulan;
+
+document
+.getElementById("tanggalAkhir")
+.value = hariIni;
