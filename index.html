@@ -1,41 +1,41 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Catatan Keuangan</title>
 
 <link rel="stylesheet" href="style.css">
 
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 </head>
+
 <body>
+
+<!-- DASHBOARD -->
+
+<div id="dashboardPage"
+class="page active">
 
 <h1>💰 Catatan Keuangan</h1>
 
 <div class="card">
 
-<h2>📊 Dashboard</h2>
+<h3>Pengeluaran Hari Ini</h3>
 
-<div>
+<div
+id="totalHariIni"
+class="nominal-besar">
 
-<p><b>Pengeluaran Hari Ini</b></p>
-
-<div id="totalHariIni" class="total">
 Rp 0
-</div>
-
-</div>
-
-<hr>
-
-<div>
-
-<p><b>Pengeluaran Bulan Ini</b></p>
-
-<div id="totalBulanIni" class="total">
-Rp 0
-</div>
 
 </div>
 
@@ -43,16 +43,70 @@ Rp 0
 
 <div class="card">
 
-<h2>Tambah Pengeluaran</h2>
+<h3>Pengeluaran Bulan Ini</h3>
 
-<input type="date" id="tanggal">
+<div
+id="totalBulanIni"
+class="nominal-besar">
+
+Rp 0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Jumlah Transaksi Hari Ini</h3>
+
+<div
+id="jumlahTransaksi"
+class="nominal-besar">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>Kategori Terbesar Bulan Ini</h3>
+
+<div
+id="kategoriTerbesar"
+class="nominal-besar">
+
+-
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TAMBAH -->
+
+<div
+id="tambahPage"
+class="page">
+
+<h1>➕ Tambah Pengeluaran</h1>
+
+<div class="card">
+
+<input
+type="date"
+id="tanggal">
 
 <select id="kategori">
+
 <option>Makan</option>
 <option>BBM</option>
 <option>Belanja</option>
 <option>Rokok</option>
 <option>Lainnya</option>
+
 </select>
 
 <input
@@ -65,45 +119,120 @@ type="text"
 id="catatan"
 placeholder="Catatan">
 
-<button onclick="tambahPengeluaran()">
+<button
+onclick="tambahPengeluaran()">
+
 Simpan
+
 </button>
 
 </div>
 
-<div class="card">
-
-<h2>Ringkasan Kategori</h2>
-
-<input
-type="date"
-id="tanggalRingkasan">
-
-<button onclick="buatRingkasan()">
-Lihat Ringkasan
-</button>
-
-<div id="hasilRingkasan">
-Pilih tanggal dahulu
 </div>
 
-</div>
+<!-- RIWAYAT -->
+
+<div
+id="riwayatPage"
+class="page">
+
+<h1>📋 Riwayat</h1>
 
 <div class="card">
-
-<h2>Riwayat Pengeluaran</h2>
 
 <input
 type="date"
 id="filterTanggal">
 
-<button onclick="filterRiwayat()">
+<button
+onclick="filterRiwayat()">
+
 Tampilkan
+
 </button>
 
-<div id="hasilRiwayat">
-Belum ada data
 </div>
+
+<div
+id="hasilRiwayat">
+
+</div>
+
+</div>
+
+<!-- SETELAN -->
+
+<div
+id="setelanPage"
+class="page">
+
+<h1>⚙️ Setelan</h1>
+
+<div class="card">
+
+<h3>Versi Aplikasi</h3>
+
+<p>v2.0</p>
+
+<hr>
+
+<h3>Penyimpanan</h3>
+
+<p>Local Storage Browser</p>
+
+<hr>
+
+<button
+onclick="hapusSemuaData()"
+class="btn-merah">
+
+Hapus Semua Data
+
+</button>
+
+</div>
+
+</div>
+
+<!-- NAVBAR -->
+
+<div class="bottom-nav">
+
+<button
+onclick="showPage('dashboardPage')">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Home</span>
+
+</button>
+
+<button
+onclick="showPage('tambahPage')">
+
+<i class="fa-solid fa-plus"></i>
+
+<span>Tambah</span>
+
+</button>
+
+<button
+onclick="showPage('riwayatPage')">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+<span>Riwayat</span>
+
+</button>
+
+<button
+onclick="showPage('setelanPage')">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>Setelan</span>
+
+</button>
 
 </div>
 
