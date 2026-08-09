@@ -184,27 +184,123 @@ kategoriTerbesar;
    FILTER RIWAYAT
 =========================== */
 
+
 function filterRiwayat(){
 
-const tanggal =
+const awal =
 document
-.getElementById("filterTanggal")
+.getElementById("tanggalAwal")
 .value;
+
+const akhir =
+document
+.getElementById("tanggalAkhir")
+.value;
+
+if(!awal || !akhir){
+
+alert(
+"Pilih tanggal awal dan akhir"
+);
+
+return;
+
+}
 
 const hasilDiv =
 document
 .getElementById("hasilRiwayat");
 
 let hasil =
-data.filter(item =>
-item.tanggal === tanggal
+data.filter(item=>{
+
+return item.tanggal >= awal
+&&
+item.tanggal <= akhir;
+
+});
+
+hasil.sort((a,b)=>
+new Date(b.tanggal)
+-
+new Date(a.tanggal)
 );
 
-hasil.reverse();
+let total = 0;
+
+let kategori = {};
+
+hasil.forEach(item=>{
+
+total += item.nominal;
+
+if(!kategori[item.kategori]){
+
+kategori[item.kategori]=0;
+
+}
+
+kategori[item.kategori]+=item.nominal;
+
+});
+
+let kategoriTerbesar = "-";
+let nilaiTerbesar = 0;
+
+for(let k in kategori){
+
+if(kategori[k] > nilaiTerbesar){
+
+nilaiTerbesar =
+kategori[k];
+
+kategoriTerbesar =
+k;
+
+}
+
+}
+
+document
+.getElementById(
+"ringkasanPeriode"
+)
+.innerHTML =
+
+`
+<div class="ringkasan-periode">
+
+<h3>Ringkasan Periode</h3>
+
+<p>
+${awal}
+s/d
+${akhir}
+</p>
+
+<br>
+
+<p>
+<b>Jumlah Transaksi:</b>
+${hasil.length}
+</p>
+
+<p>
+<b>Total Pengeluaran:</b>
+Rp ${total.toLocaleString("id-ID")}
+</p>
+
+<p>
+<b>Kategori Terbesar:</b>
+${kategoriTerbesar}
+</p>
+
+</div>
+`;
 
 if(hasil.length===0){
 
-hasilDiv.innerHTML =
+hasilDiv.innerHTML=
 
 `
 <div class="empty">
@@ -227,10 +323,14 @@ html +=
 `
 <div class="item">
 
-<b>${item.kategori}</b>
+<b>
+${item.kategori}
+</b>
 
 <div class="badge">
+
 ${item.tanggal}
+
 </div>
 
 <br><br>
@@ -240,8 +340,11 @@ ${item.catatan || "-"}
 <br><br>
 
 <b>
-Rp ${item.nominal
+
+Rp
+${item.nominal
 .toLocaleString("id-ID")}
+
 </b>
 
 <br><br>
