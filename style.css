@@ -223,3 +223,31 @@ color:#1e88e5;
 
 }
 
+.ringkasan-periode{
+
+background:#eef6ff;
+
+padding:15px;
+
+border-radius:12px;
+
+margin-bottom:15px;
+
+border:1px solid #cfe2ff;
+
+}
+
+.ringkasan-periode h3{
+
+margin-bottom:10px;
+
+color:#1e88e5;
+
+}
+
+.ringkasan-periode p{
+
+margin-bottom:5px;
+
+}
+
