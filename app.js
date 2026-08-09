@@ -443,3 +443,96 @@ new Date()
 =========================== */
 
 renderDashboard();
+
+/* ===========================
+   EXPORT EXCEL
+=========================== */
+
+function exportExcel(){
+
+if(data.length === 0){
+
+alert("Belum ada data untuk diexport");
+
+return;
+
+}
+
+const transaksi = data.map(item => ({
+
+Tanggal: item.tanggal,
+
+Kategori: item.kategori,
+
+Nominal: item.nominal,
+
+Catatan: item.catatan || ""
+
+}));
+
+let ringkasan = {};
+
+data.forEach(item=>{
+
+if(!ringkasan[item.kategori]){
+
+ringkasan[item.kategori] = 0;
+
+}
+
+ringkasan[item.kategori] += item.nominal;
+
+});
+
+const sheetRingkasan = [];
+
+for(let kategori in ringkasan){
+
+sheetRingkasan.push({
+
+Kategori: kategori,
+
+Total: ringkasan[kategori]
+
+});
+
+}
+
+const workbook =
+XLSX.utils.book_new();
+
+const ws1 =
+XLSX.utils.json_to_sheet(
+transaksi
+);
+
+const ws2 =
+XLSX.utils.json_to_sheet(
+sheetRingkasan
+);
+
+XLSX.utils.book_append_sheet(
+workbook,
+ws1,
+"Transaksi"
+);
+
+XLSX.utils.book_append_sheet(
+workbook,
+ws2,
+"Ringkasan"
+);
+
+const today =
+new Date();
+
+const namaFile =
+
+`Pengeluaran_${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}.xlsx`;
+
+XLSX.writeFile(
+workbook,
+namaFile
+);
+
+}
