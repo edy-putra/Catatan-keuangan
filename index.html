@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catatan Keuangan</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>💰 Catatan Keuangan</h1>
+
+<div class="card">
+<h2>Total Pengeluaran</h2>
+<p id="total">Rp 0</p>
+</div>
+
+<div class="card">
+
+<h2>Tambah Pengeluaran</h2>
+
+<input type="date" id="tanggal">
+
+<select id="kategori">
+<option>Makan</option>
+<option>BBM</option>
+<option>Belanja</option>
+<option>Rokok</option>
+<option>Lainnya</option>
+</select>
+
+<input type="number" id="nominal" placeholder="Nominal">
+
+<input type="text" id="catatan" placeholder="Catatan">
+
+<button onclick="tambahPengeluaran()">
+Simpan
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Ringkasan Kategori</h2>
+
+<div id="ringkasan"></div>
+
+</div>
+
+<div class="card">
+
+<h2>Riwayat Pengeluaran</h2>
+
+<div id="riwayat"></div>
+
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
