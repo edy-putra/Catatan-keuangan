@@ -87,9 +87,29 @@ class="page">
 
 <div class="card">
 
+<label>Jenis Transaksi</label>
+
+<select id="jenis">
+
+<option value="pengeluaran">
+💸 Pengeluaran
+</option>
+
+<option value="pemasukan">
+💰 Pemasukan
+</option>
+
+</select>
+
+<br><br>
+
+<label>Tanggal</label>
+
 <input
 type="date"
 id="tanggal">
+
+<label>Kategori</label>
 
 <select id="kategori">
 
@@ -99,22 +119,31 @@ id="tanggal">
 <option>Rokok</option>
 <option>Lainnya</option>
 
+<option>Gaji</option>
+<option>Bonus</option>
+<option>Usaha</option>
+<option>Hasil Panen</option>
+
 </select>
+
+<label>Nominal</label>
 
 <input
 type="number"
 id="nominal"
-placeholder="Nominal">
+placeholder="Masukkan nominal">
+
+<label>Catatan</label>
 
 <input
 type="text"
 id="catatan"
-placeholder="Catatan">
+placeholder="Catatan transaksi">
 
 <button
 onclick="tambahPengeluaran()">
 
-Simpan
+💾 Simpan
 
 </button>
 
