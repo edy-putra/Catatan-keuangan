@@ -42,6 +42,9 @@ JSON.stringify(data)
 
 function tambahPengeluaran(){
 
+const jenis =
+document.getElementById("jenis").value;
+
 const tanggal =
 document.getElementById("tanggal").value;
 
@@ -68,6 +71,8 @@ data.push({
 
 id:Date.now(),
 
+jenis,
+
 tanggal,
 
 kategori,
@@ -77,7 +82,7 @@ nominal,
 catatan
 
 });
-
+   
 simpanData();
 
 document.getElementById("nominal").value="";
@@ -107,80 +112,88 @@ String(sekarang.getDate()).padStart(2,'0')
 const bulanIni =
 hariIni.substring(0,7);
 
-let totalHari = 0;
-let totalBulan = 0;
-let jumlahTransaksi = 0;
+let pemasukanBulan = 0;
+let pengeluaranHari = 0;
+let pengeluaranBulan = 0;
 
-let kategoriBulanan = {};
+let riwayatHariIni = [];
 
 data.forEach(item=>{
 
+const jenis =
+item.jenis || "pengeluaran";
+
+if(jenis === "pemasukan"){
+
+if(item.tanggal.startsWith(bulanIni)){
+
+pemasukanBulan += item.nominal;
+
+}
+
+}else{
+
 if(item.tanggal === hariIni){
 
-totalHari += item.nominal;
+pengeluaranHari += item.nominal;
 
-jumlahTransaksi++;
+riwayatHariIni.push(item);
 
 }
 
 if(item.tanggal.startsWith(bulanIni)){
 
-totalBulan += item.nominal;
-
-if(!kategoriBulanan[item.kategori]){
-
-kategoriBulanan[item.kategori]=0;
+pengeluaranBulan += item.nominal;
 
 }
-
-kategoriBulanan[item.kategori]+=item.nominal;
 
 }
 
 });
 
-let kategoriTerbesar = "-";
-let nilaiTerbesar = 0;
-
-for(let kategori in kategoriBulanan){
-
-if(
-kategoriBulanan[kategori]
->
-nilaiTerbesar
-){
-
-nilaiTerbesar =
-kategoriBulanan[kategori];
-
-kategoriTerbesar =
-kategori;
-
-}
-
-}
-
 document
-.getElementById("totalHariIni")
+.getElementById("pemasukanBulan")
 .innerHTML =
 "Rp " +
-totalHari.toLocaleString("id-ID");
+pemasukanBulan.toLocaleString("id-ID");
 
 document
-.getElementById("totalBulanIni")
+.getElementById("pengeluaranHari")
 .innerHTML =
 "Rp " +
-totalBulan.toLocaleString("id-ID");
+pengeluaranHari.toLocaleString("id-ID");
 
 document
-.getElementById("jumlahTransaksi")
+.getElementById("pengeluaranBulan")
 .innerHTML =
-jumlahTransaksi;
+"Rp " +
+pengeluaranBulan.toLocaleString("id-ID");
+
+let html = "";
+
+riwayatHariIni.forEach(item=>{
+
+html += `
+
+<div style="margin-bottom:10px">
+
+<b>${item.kategori}</b>
+
+<br>
+
+Rp ${item.nominal.toLocaleString("id-ID")}
+
+</div>
+
+`;
+
+});
 
 document
-.getElementById("kategoriTerbesar")
+.getElementById("riwayatHariIni")
 .innerHTML =
-kategoriTerbesar;
+
+html || "Belum ada transaksi";
 
 }
 
@@ -328,7 +341,15 @@ html +=
 <div class="item">
 
 <b>
+
+${item.jenis === "pemasukan"
+? "💰 PEMASUKAN"
+: "💸 PENGELUARAN"}
+
+<br>
+
 ${item.kategori}
+
 </b>
 
 <div class="badge">
@@ -465,13 +486,20 @@ return;
 
 const transaksi = data.map(item => ({
 
-Tanggal: item.tanggal,
+Jenis:
+item.jenis || "pengeluaran",
 
-Kategori: item.kategori,
+Tanggal:
+item.tanggal,
 
-Nominal: item.nominal,
+Kategori:
+item.kategori,
 
-Catatan: item.catatan || ""
+Nominal:
+item.nominal,
+
+Catatan:
+item.catatan || ""
 
 }));
 
@@ -691,9 +719,16 @@ html +=
 <div class="item">
 
 <b>
-${item.kategori}
-</b>
 
+${item.jenis === "pemasukan"
+? "💰 PEMASUKAN"
+: "💸 PENGELUARAN"}
+
+<br>
+
+${item.kategori}
+
+</b>
 <div class="badge">
 
 ${item.tanggal}
