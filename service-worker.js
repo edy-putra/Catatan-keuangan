@@ -1,42 +1,57 @@
-const CACHE_NAME = "keuangan-v3.1";
+const CACHE_NAME = "catatan-keuangan-v3.1";
 
-const urlsToCache = [
-
-"./",
-"./index.html",
-"./style.css",
-"./app.js"
-
+const FILES_TO_CACHE = [
+  "./",
+  "./index.html",
+  "./style.css",
+  "./app.js",
+  "./manifest.json"
 ];
 
 self.addEventListener("install", event => {
 
-event.waitUntil(
+  self.skipWaiting();
 
-caches.open(CACHE_NAME)
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(FILES_TO_CACHE))
+  );
 
-.then(cache => {
+});
 
-return cache.addAll(urlsToCache);
+self.addEventListener("activate", event => {
 
-})
+  event.waitUntil(
 
-);
+    caches.keys().then(keys => {
+
+      return Promise.all(
+
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+
+      );
+
+    })
+
+    .then(() => self.clients.claim())
+
+  );
 
 });
 
 self.addEventListener("fetch", event => {
 
-event.respondWith(
+  event.respondWith(
 
-caches.match(event.request)
+    caches.match(event.request)
+      .then(response => {
 
-.then(response => {
+        return response || fetch(event.request);
 
-return response || fetch(event.request);
+      })
 
-})
-
-);
+  );
 
 });
