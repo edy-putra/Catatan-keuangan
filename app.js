@@ -97,7 +97,6 @@ alert("Data berhasil disimpan");
 /* ===========================
    DASHBOARD
 =========================== */
-
 function renderDashboard(){
 
 const sekarang = new Date();
@@ -116,6 +115,9 @@ let pemasukanBulan = 0;
 let pengeluaranHari = 0;
 let pengeluaranBulan = 0;
 
+let totalPemasukan = 0;
+let totalPengeluaran = 0;
+
 let riwayatHariIni = [];
 
 data.forEach(item=>{
@@ -125,6 +127,8 @@ item.jenis || "pengeluaran";
 
 if(jenis === "pemasukan"){
 
+totalPemasukan += item.nominal;
+
 if(item.tanggal.startsWith(bulanIni)){
 
 pemasukanBulan += item.nominal;
@@ -132,6 +136,8 @@ pemasukanBulan += item.nominal;
 }
 
 }else{
+
+totalPengeluaran += item.nominal;
 
 if(item.tanggal === hariIni){
 
@@ -150,6 +156,15 @@ pengeluaranBulan += item.nominal;
 }
 
 });
+
+const saldoSaatIni =
+totalPemasukan - totalPengeluaran;
+
+document
+.getElementById("saldoSaatIni")
+.innerHTML =
+"Rp " +
+saldoSaatIni.toLocaleString("id-ID");
 
 document
 .getElementById("pemasukanBulan")
