@@ -82,7 +82,7 @@ nominal,
 catatan
 
 });
-   
+
 simpanData();
 
 document.getElementById("nominal").value="";
