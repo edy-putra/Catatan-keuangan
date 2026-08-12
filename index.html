@@ -23,17 +23,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <!-- DASHBOARD -->
 
-<div id="dashboardPage"
-class="page active">
-
-<h1>💰 Catatan Keuangan</h1>
-
 <div class="card">
 
-<h3>Pengeluaran Hari Ini</h3>
+<h3>💰 Pemasukan Bulan Ini</h3>
 
 <div
-id="totalHariIni"
+id="pemasukanBulan"
 class="nominal-besar">
 
 Rp 0
@@ -44,10 +39,10 @@ Rp 0
 
 <div class="card">
 
-<h3>Pengeluaran Bulan Ini</h3>
+<h3>💸 Pengeluaran Hari Ini</h3>
 
 <div
-id="totalBulanIni"
+id="pengeluaranHari"
 class="nominal-besar">
 
 Rp 0
@@ -58,13 +53,13 @@ Rp 0
 
 <div class="card">
 
-<h3>Jumlah Transaksi Hari Ini</h3>
+<h3>📊 Total Pengeluaran Bulan Ini</h3>
 
 <div
-id="jumlahTransaksi"
+id="pengeluaranBulan"
 class="nominal-besar">
 
-0
+Rp 0
 
 </div>
 
@@ -72,20 +67,16 @@ class="nominal-besar">
 
 <div class="card">
 
-<h3>Kategori Terbesar Bulan Ini</h3>
+<h3>📝 Riwayat Hari Ini</h3>
 
-<div
-id="kategoriTerbesar"
-class="nominal-besar">
+<div id="riwayatHariIni">
 
--
+Belum ada transaksi
 
 </div>
 
 </div>
-
-</div>
-
+  
 <!-- TAMBAH -->
 
 <div
@@ -139,14 +130,20 @@ class="page">
 
 <h1>📋 Riwayat</h1>
 
-<div class="card">
-
-<input
-type="date"
-id="tanggalAwal">
-
 <label>Tanggal Awal</label>
 
+<select id="jenis">
+
+<option value="pengeluaran">
+💸 Pengeluaran
+</option>
+
+<option value="pemasukan">
+💰 Pemasukan
+</option>
+
+</select>
+  
 <input
 type="date"
 id="tanggalAwal">
@@ -165,11 +162,6 @@ Tampilkan
 </button>
 
 <div id="ringkasanPeriode"></div>
-
-<div
-id="ringkasanPeriode">
-
-</div>
 
 </div>
 
